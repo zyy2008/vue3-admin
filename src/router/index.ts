@@ -1,4 +1,3 @@
-import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import BasicLayout from "@/layouts/BasicLayout";
 
@@ -26,7 +25,4 @@ const routes: RouteRecordRaw[] = [
   },
 ];
 
-export default createRouter({
-  history: createWebHistory(),
-  routes,
-});
+export default routes;

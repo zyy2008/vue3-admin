@@ -4,7 +4,7 @@ Webpack + Vue3 + TypeScript + Ant Design Vue + Umi-Request
 
 > 兼容性注意
 
-> vite 需要 Node.js v8.9 或更高版本 (推荐 v10 以上)。然而，有些模板需要依赖更高的 Node 版本才能正常运行，当你的包管理器发出警告时，请注意升级你的 Node 版本。
+> Webpack 需要 Node.js v8.9 或更高版本 (推荐 v10 以上)。然而，有些模板需要依赖更高的 Node 版本才能正常运行，当你的包管理器发出警告时，请注意升级你的 Node 版本。
 
 > 存在多个版本共存建议安装 [nvm windows](https://github.com/coreybutler/nvm-windows/releases) 进行 node 版本管理。
 

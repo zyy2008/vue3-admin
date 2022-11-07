@@ -28,7 +28,6 @@ Webpack + Vue3 + TypeScript + Ant Design Vue + Umi-Request
 │   ├── global.less            # 全局样式
 │   └── main.ts                # 入口文件 加载组件 初始化等
 ├── types                      # 全局公用类型 包括类型注入
-├── index.html                 # vue 入口模板
 ├── tsconfig.json              # typescript 配置
 ├── vue.config.js              # webpack 配置
 └── package.json               # package.json

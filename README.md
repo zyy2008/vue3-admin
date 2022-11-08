@@ -210,6 +210,14 @@ export default defineComponent({
 
 当项目开发完毕，只需要运行一行命令就可以打包你的应用：
 
+```
+$ yarn build
+
+or
+
+$ npm run build
+```
+
 # 跨域处理
 
 ## 产生原因

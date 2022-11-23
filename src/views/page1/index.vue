@@ -1,3 +1,9 @@
 <template>
-  <div>page1</div>
+  <div>vue1</div>
 </template>
+<script>
+export default {
+  name: "HomePage2",
+  setup() {},
+};
+</script>

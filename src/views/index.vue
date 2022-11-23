@@ -3,6 +3,7 @@
 </template>
 <script>
 export default {
+  name: "HomePage1",
   setup() {},
 };
 </script>

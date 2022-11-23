@@ -3,9 +3,42 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "prepare": "husky install",
+    "serve": "vue-cli-service serve"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,vue,.tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "eslintConfig": {
+    "env": {
+      "node": true
+    },
+    "parserOptions": {
+      "parser": "@typescript-eslint/parser"
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended",
+      "@vue/typescript"
+    ],
+    "rules": {},
+    "root": true
   },
   "dependencies": {
     "@ant-design-vue/pro-layout": "^3.2.3",
@@ -20,6 +53,8 @@
   "devDependencies": {
     "@babel/core": "^7.19.6",
     "@babel/eslint-parser": "^7.19.1",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
     "@vue/cli-plugin-babel": "~5.0.8",
@@ -29,29 +64,10 @@
     "@vue/eslint-config-typescript": "^11.0.2",
     "eslint": "^8.26.0",
     "eslint-plugin-vue": "^9.6.0",
+    "husky": "^8.0.0",
     "less": "^4.1.3",
     "less-loader": "^5.0.0",
+    "lint-staged": "^13.0.3",
     "typescript": "~4.8.4"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended",
-      "@vue/typescript"
-    ],
-    "parserOptions": {
-      "parser": "@typescript-eslint/parser"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
+  }
 }

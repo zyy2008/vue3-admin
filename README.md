@@ -13,6 +13,7 @@ Webpack + Vue3 + TypeScript + Ant Design Vue + Umi-Request
 本项目已经为你生成基础开发结构，提供了涵盖中后台开发的所需基础布局。
 
 ```bash
+├── .husky                     # git提交校验
 ├── public                     # 静态资源
 │   │── favicon.ico            # favicon图标
 │   └── index.html             # vue 入口模板
@@ -28,6 +29,8 @@ Webpack + Vue3 + TypeScript + Ant Design Vue + Umi-Request
 │   ├── global.less            # 全局样式
 │   └── main.ts                # 入口文件 加载组件 初始化等
 ├── types                      # 全局公用类型 包括类型注入
+├── commitlint.config.js       # git提交规则 配置
+├── json2service.json          # autos 参数配置
 ├── tsconfig.json              # typescript 配置
 ├── vue.config.js              # webpack 配置
 └── package.json               # package.json
@@ -53,8 +56,6 @@ Webpack + Vue3 + TypeScript + Ant Design Vue + Umi-Request
 │       └── newPage                   # 新建页面文件名称
 │            │── index.vue|.tsx       # 界面入口文件
 │            │── index.module.less    # 存放index样式
-│            │── service.ts|.js       # index界面需要请求的接口
-│            │── api.d.ts             # 存放当前接口返回的类型定义
 │            └── components           # 当前界面提取的组件 非必须
 ```
 
@@ -123,55 +124,10 @@ Webpack + Vue3 + TypeScript + Ant Design Vue + Umi-Request
 
 # 和服务端进行交互
 
-1. 页面交互操作；
-2. 调用模块 service.ts 请求函数；
-3. 使用封装的 request.ts 发送请求；
-4. 获取服务端返回数据
-5. 更新 data；
-
-新建请求函数 server.ts
-
-```ts
-import { request, useRequest } from "@/utils/request";
-
-// 单个服务部署请求设置 request 的 prefix，多服务部署需要导出useRequest并设置对应服务IP地址
-// const request = useRequest(userUrl);
-
-enum Api {
-  userInfo = "/userAction/getUserInfo",
-}
-
-export async function getUserInfo() {
-  return request<ResultNoData & { data: Api.User[] }>(Api.userInfo);
-}
-```
-
-接口返回类型定义 api.d.ts
-
-```ts
-namespace Api {
-  export type User = {
-    college?: string;
-    createTime?: string;
-    homeShow?: string;
-    individual?: string;
-    password?: string;
-    phoneNumber?: string;
-    role?: "teacher" | "student" | "admin";
-    technicalTitle?: string;
-    updateTime?: string;
-    userClassName?: string;
-    userId?: string;
-    userName?: string;
-    sex?: string;
-    birthday?: any;
-    major?: string;
-    userPicture?: string;
-    systemName?: "1" | "2" | "3";
-    attendClassInfo?: AttendClassInfo | null;
-  };
-}
-```
+1. 执行命令 yarn run api，生成 services 接口 ts 文件
+2. 调用模块 services；
+3. 获取服务端返回数据
+4. 更新 data；
 
 界面引用请求 index.vue
 
@@ -182,20 +138,19 @@ namespace Api {
 <script>
 import { ref } from "vue";
 import { message } from "ant-design-vue";
-import { getUserInfo } from "./server";
+import { APIS } from "@/services";
 export default defineComponent({
   setup() {
    const list = ref<Api.User[]>([]);
-   getUserInfo().then(res=>{
-      const {code, data, msg} = res;
+   APIS.DefaultApi.commonTaskPut().then((res) => {
+       const {code, data, msg} = res;
       if(code === 'S-00001'){
         list.value = data
         message.success(msg)
       }else{
         message.warning(msg);
       }
-   })
-
+    });
    return {
      list
    };
@@ -203,6 +158,41 @@ export default defineComponent({
 });
 </script>
 ```
+
+# Git 提交信息
+
+message 信息格式采用目前主流的 Angular 规范，这是目前使用最广的写法，比较合理和系统化，并且有配套的工具。
+
+## commit message 格式说明
+
+Commit message 一般包括三部分：Header、Body 和 Footer。
+
+### Header
+
+type(scope):subject
+
+- type：用于说明 commit 的类别，规定为如下几种
+  - feat：新增功能；
+  - fix：修复 bug；
+  - docs：修改文档；
+  - refactor：代码重构，未新增任何功能和修复任何 bug；
+  - build：改变构建流程，新增依赖库、工具等（例如 webpack 修改）；
+  - style：仅仅修改了空格、缩进等，不改变代码逻辑；
+  - perf：改善性能和体现的修改；
+  - chore：非 src 和 test 的修改；
+  - test：测试用例的修改；
+  - revert：回滚到上一个版本；
+- scope：【可选】用于说明 commit 的影响范围
+- subject：commit 的简要说明，尽量简短
+
+### Body
+
+对本次 commit 的详细描述，可分多行
+
+### Footer
+
+不兼容变动：需要描述相关信息
+关闭指定 Issue：输入 Issue 信息
 
 # 构建和发布
 

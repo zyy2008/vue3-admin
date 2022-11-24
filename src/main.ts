@@ -10,7 +10,7 @@ import routes from "@/router";
 import Antd from "ant-design-vue";
 import AppCom from "./App";
 import "@ant-design-vue/pro-layout/dist/style.css";
-import { name } from "../package.json";
+import packageInfo from "../package.json";
 
 let router: Router | null;
 let instance: App<Element> | null;
@@ -24,7 +24,9 @@ declare global {
 
 function render(props?: any) {
   const { container } = props ?? {};
-  history = createWebHistory(window.__POWERED_BY_QIANKUN__ ? `/${name}` : "/");
+  history = createWebHistory(
+    window.__POWERED_BY_QIANKUN__ ? `/${packageInfo?.name}` : "/"
+  );
   router = createRouter({
     history,
     routes,

@@ -22,6 +22,7 @@ module.exports = defineConfig({
     resolve: {
       alias: {
         "@": resolve("src"),
+        "@ajax": resolve("src/utils/ajax"),
       },
     },
     output: {

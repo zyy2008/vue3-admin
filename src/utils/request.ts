@@ -4,7 +4,7 @@ import type {
   RequestMethod,
   RequestOptionsInit,
 } from "umi-request";
-import { notification } from "antd";
+import { notification } from "ant-design-vue";
 
 const codeMessage: Record<number, string> = {
   200: "服务器成功返回请求的数据。",

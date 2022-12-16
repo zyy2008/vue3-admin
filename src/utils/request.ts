@@ -4,7 +4,7 @@ import type {
   RequestMethod,
   RequestOptionsInit,
 } from "umi-request";
-import { notification } from "ant-design-vue";
+import { notification } from "antd";
 
 const codeMessage: Record<number, string> = {
   200: "服务器成功返回请求的数据。",
@@ -51,6 +51,7 @@ const errorHandler = (error: ResponseError) => {
  */
 export const request: RequestMethod = extend({
   errorHandler,
+  prefix: "http://192.169.7.200:3000/mock/53",
 });
 
 const { interceptors } = request;
@@ -81,24 +82,14 @@ interceptors.response.use(async (response: Response) => {
   if (!res) {
     throw new Error("请求出错，请稍候重试");
   }
-  const { code, msg } = res;
-  const hasSuccess = res && Reflect.has(res, "code") && code === "S-00001";
+  const { success, errorMsg } = res;
+  const hasSuccess = res && Reflect.has(res, "success") && success;
   if (hasSuccess) {
     return res;
   }
-  let timeoutMsg = "";
-  switch (code) {
-    case 401:
-      timeoutMsg = codeMessage[code];
-      break;
-    default:
-      if (msg) {
-        timeoutMsg = msg;
-      }
-  }
   notification.error({
     message: `请求错误`,
-    description: timeoutMsg,
+    description: errorMsg,
   });
   return res;
 });

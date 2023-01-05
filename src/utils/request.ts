@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { extend } from "umi-request";
 import type {
   ResponseError,
@@ -51,7 +52,7 @@ const errorHandler = (error: ResponseError) => {
  */
 export const request: RequestMethod = extend({
   errorHandler,
-  prefix: "http://192.169.7.200:3000/mock/53",
+  prefix: "http://192.169.7.200:8070",
 });
 
 const { interceptors } = request;
@@ -72,11 +73,31 @@ interceptors.request.use(
  * response-对请求返回后的处理
  */
 
-interceptors.response.use(async (response: Response) => {
+interceptors.response.use(async (response: Response, opt) => {
   let res: any;
   try {
     res = await response.clone().json();
   } catch (error) {
+    const { responseType } = opt;
+    switch (responseType) {
+      case "blob":
+        const disposition = response.headers.get("content-disposition");
+        const filename = disposition
+          ? decodeURI(disposition.split(";")[1].split("filename=")[1])
+          : "";
+        const blob = await response.clone().blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a); // append the element to the dom
+        a.click();
+        a.remove(); // afterwards, remove the element
+        break;
+
+      default:
+        break;
+    }
     return response;
   }
   if (!res) {

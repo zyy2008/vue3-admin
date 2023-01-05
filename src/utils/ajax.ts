@@ -10,11 +10,9 @@ export declare type NonStandardAjaxPromise<R> = Promise<{
   result: R;
 }>;
 
-export interface ExtraFetchParams {
+export interface ExtraFetchParams extends RequestOptionsInit {
   /** extra data for extends */
   extra?: any;
-  /** 扩展请求头 */
-  headers?: any;
   /** cancel request */
   cancel?: Promise<string | undefined>;
 }
@@ -27,6 +25,12 @@ export interface WrappedFetchParams extends RequestOptionsInit {
 
 const ajax = {
   ajax: ({ url, query, form, ...opt }: WrappedFetchParams) => {
+    if (
+      (opt.headers as Record<string, string>)?.["Content-Type"] ===
+      "multipart/form-data"
+    ) {
+      opt.headers = {};
+    }
     return request(url, {
       data: form,
       ...opt,
